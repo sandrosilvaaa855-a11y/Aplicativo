@@ -23,7 +23,7 @@ fi
 
 # Verificar Bash
 if [ -z "${BASH_VERSION:-}" ]; then
-    echo "Execute com: bash enviar_github.sh"
+    echo "Execute com: bash teste.sh"
     exit 1
 fi
 

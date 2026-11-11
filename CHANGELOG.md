@@ -13,3 +13,8 @@
 
 - Data: 11/11/2026 10:24
 - Atualização: testw
+
+## Versão 1.0.2
+
+- Data: 11/11/2026 12:44
+- Atualização: atualizacao pronta pra voce baixar
