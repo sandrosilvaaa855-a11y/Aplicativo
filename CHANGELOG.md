@@ -28,3 +28,13 @@
 
 - Data: 11/11/2026 16:29
 - Atualização: teste de atualizacao 
+
+## Versão 1.0.1
+
+- Data: 11/11/2026 16:47
+- Atualização: testando o sistema de atualizacao
+
+## Versão 1.0.1
+
+- Data: 11/11/2026 16:48
+- Atualização: teste de atualizacao
