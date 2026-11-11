@@ -1,0 +1,10 @@
+github-token.txt
+config.env
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.keystore
+*.jks
+*.apk

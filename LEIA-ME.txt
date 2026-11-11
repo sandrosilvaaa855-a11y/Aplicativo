@@ -1,0 +1,67 @@
+======================================================
+ PANTHERSTREAM - ENVIAR O APLICATIVO PELO CELULAR
+ Usando o Termux (Android)
+======================================================
+
+O que tem nesta pasta:
+  enviar-app.sh     script que envia o APK para o GitHub
+  config.env        conta e repositorio de destino
+  github-token.txt  seu token de acesso (NAO COMPARTILHE)
+  PantherStream-v1.2.apk  aplicativo pronto
+
+------------------------------------------------------
+ PASSO A PASSO
+------------------------------------------------------
+
+1. Instale o Termux no celular.
+   Recomendado: instale pela F-Droid ou pela Play Store.
+
+2. Abra o Termux e instale o necessario:
+
+   pkg update
+   pkg install curl unzip
+
+3. Coloque o arquivo PantherStream-Termux.zip no celular
+   (pode ser na pasta Downloads) e descompacte:
+
+   termux-setup-storage
+   unzip ~/storage/downloads/PantherStream-Termux.zip -d ~/PantherStream
+
+   Se o comando acima nao achar o arquivo, confira o caminho:
+
+   ls ~/storage/downloads
+
+4. Entre na pasta e rode o script:
+
+   cd ~/PantherStream
+   bash enviar-app.sh
+
+5. Pronto. O script mostra a release criada e o link direto
+   para download.
+
+------------------------------------------------------
+ ENVIAR OUTRA VERSAO
+------------------------------------------------------
+
+Coloque o APK novo nesta pasta e rode:
+
+   bash enviar-app.sh PantherStream-v1.3.apk
+
+Ou informe a versao e as notas:
+
+   bash enviar-app.sh PantherStream-v1.3.apk 1.3 "Correcoes e melhorias"
+
+O script sempre usa o asset chamado PantherStream.apk, que e o
+nome que o aplicativo procura para se atualizar.
+
+------------------------------------------------------
+ IMPORTANTE
+------------------------------------------------------
+
+- O arquivo github-token.txt da acesso a sua conta. Nao envie
+  esta pasta nem o ZIP para outras pessoas e nao publique o token.
+- Se a conta do GitHub estiver suspensa, o script avisa e mostra
+  o link para recorrer:
+  https://support.github.com/contact?tags=rr-suspended-account
+- O repositorio precisa ser publico para o aplicativo consultar
+  a versao mais recente sem login.
