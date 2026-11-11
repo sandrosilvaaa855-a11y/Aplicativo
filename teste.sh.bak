@@ -1,0 +1,198 @@
+
+#!/data/data/com.termux/files/usr/bin/bash
+
+# ==========================================
+# ATUALIZADOR SEGURO DO GITHUB
+# ==========================================
+
+set -eu
+
+REPO="https://github.com/sandrosilvaaa855-a11y/Aplicativo.git"
+BRANCH="main"
+
+echo "======================================"
+echo "       ATUALIZADOR DO APLICATIVO"
+echo "======================================"
+
+# Verificar Git
+if ! command -v git >/dev/null 2>&1; then
+    echo "Git não instalado."
+    echo "Execute: pkg install git -y"
+    exit 1
+fi
+
+# Verificar Bash
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Execute com: bash teste.sh"
+    exit 1
+fi
+
+DIR="$(pwd -P)"
+
+# Confiar somente na pasta atual
+git config --global --add safe.directory "$DIR"
+
+# Inicializar repositório
+if [ ! -d ".git" ]; then
+    echo "Inicializando repositório..."
+    git init -b "$BRANCH"
+fi
+
+git branch -M "$BRANCH"
+
+# Verificar remoto
+if git remote get-url origin >/dev/null 2>&1; then
+    REMOTE="$(git remote get-url origin)"
+
+    if [ "$REMOTE" != "$REPO" ]; then
+        echo "ERRO: endereço remoto diferente!"
+        exit 1
+    fi
+else
+    git remote add origin "$REPO"
+fi
+
+# Configurar identidade
+if ! git config user.name >/dev/null 2>&1; then
+    git config user.name "Atualizador Aplicativo"
+fi
+
+if ! git config user.email >/dev/null 2>&1; then
+    git config user.email "atualizador@users.noreply.github.com"
+fi
+
+# Solicitar versão
+echo ""
+echo "======================================"
+echo "       NOVA VERSAO DO APLICATIVO"
+echo "======================================"
+
+while true; do
+    printf "Digite a versão (ex: 1.0.0): "
+    IFS= read -r VERSAO
+
+    if printf '%s\n' "$VERSAO" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+        break
+    fi
+
+    echo "Versão inválida! Exemplo: 1.0.0"
+done
+
+# Verificar versão já utilizada
+if git rev-parse -q --verify "refs/tags/v$VERSAO" >/dev/null 2>&1; then
+    echo "Essa versão já existe!"
+    exit 1
+fi
+
+# Solicitar mensagem
+echo ""
+printf "Digite a mensagem da atualização: "
+IFS= read -r MENSAGEM
+
+if [ -z "$MENSAGEM" ]; then
+    echo "A mensagem não pode ficar vazia!"
+    exit 1
+fi
+
+# Atualizar versão
+printf '%s\n' "$VERSAO" > VERSAO.txt
+
+# Criar README se não existir
+touch README.md
+
+if grep -q '^Versão atual:' README.md; then
+    sed -i "s/^Versão atual:.*/Versão atual: $VERSAO/" README.md
+else
+    printf '\nVersão atual: %s\n' "$VERSAO" >> README.md
+fi
+
+# Atualizar changelog
+{
+    printf '\n## Versão %s\n\n' "$VERSAO"
+    printf '%s\n' "- Data: $(date '+%d/%m/%Y %H:%M')"
+    printf '%s\n' "- Atualização: $MENSAGEM"
+} >> CHANGELOG.md
+
+# Mostrar resumo
+echo ""
+echo "======================================"
+echo "       RESUMO DA ATUALIZACAO"
+echo "======================================"
+echo "Aplicativo: Aplicativo"
+echo "Versão: $VERSAO"
+echo "Mensagem: $MENSAGEM"
+echo "======================================"
+
+# Adicionar arquivos
+git add -A
+
+if git diff --cached --quiet; then
+    echo "Nenhuma alteração encontrada."
+    exit 0
+fi
+
+echo ""
+git status --short
+
+printf '\nDeseja enviar ao GitHub? (s/n): '
+IFS= read -r CONFIRMA
+
+case "$CONFIRMA" in
+    s|S) ;;
+    *)
+        echo "Envio cancelado."
+        git reset
+        exit 0
+        ;;
+esac
+
+# Commit
+git commit -m "Versão $VERSAO - $MENSAGEM"
+
+# Buscar alterações remotas
+echo ""
+echo "Verificando GitHub..."
+
+git fetch origin
+
+# Integrar histórico remoto
+if git ls-remote --heads origin "$BRANCH" | grep -q "refs/heads/$BRANCH"; then
+
+    if ! git merge --no-edit --allow-unrelated-histories "origin/$BRANCH"; then
+        echo "Conflito detectado!"
+        echo "Resolva os conflitos antes de continuar."
+        exit 1
+    fi
+fi
+
+# Criar tag
+git tag -a "v$VERSAO" -m "Versão $VERSAO"
+
+# Enviar branch
+echo ""
+echo "Enviando projeto..."
+
+if ! git push -u origin "$BRANCH"; then
+    echo "Falha no envio da branch."
+    echo "Seu commit continua salvo localmente."
+    exit 1
+fi
+
+# Enviar tag
+if ! git push origin "v$VERSAO"; then
+    echo "Projeto enviado, mas houve falha ao enviar a tag."
+    exit 1
+fi
+
+echo ""
+echo "======================================"
+echo "      ATUALIZACAO CONCLUIDA!"
+echo "======================================"
+echo "Aplicativo: Aplicativo"
+echo "Versão: $VERSAO"
+echo "Tag: v$VERSAO"
+echo "Mensagem: $MENSAGEM"
+echo ""
+echo "GitHub:"
+echo "$REPO"
+echo "======================================"
