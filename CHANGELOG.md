@@ -48,3 +48,8 @@
 
 - Data: 11/11/2026 17:20
 - Atualização: atualizacao pronta
+
+## Versão 1.0.4
+
+- Data: 11/11/2026 20:45
+- Atualização: teste aplicativo 
