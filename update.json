@@ -1,11 +1,11 @@
 {
   "aplicativo": "Aplicativo",
-  "versao": "1.0.0",
-  "tag": "v1.0.0",
-  "mensagem": "testando atualizacao",
-  "arquivo_apk": "PantherStream-v1.0.0.apk",
+  "versao": "1.4",
+  "tag": "v1.4",
+  "mensagem": "Atualizacao do PantherStream com aviso de nova versao e suporte.",
+  "arquivo_apk": "PantherStream.apk",
   "api_ultima_versao": "https://api.github.com/repos/sandrosilvaaa855-a11y/Aplicativo/releases/latest",
-  "pagina_release": "https://github.com/sandrosilvaaa855-a11y/Aplicativo/releases/tag/v1.0.0",
-  "download_apk": "https://github.com/sandrosilvaaa855-a11y/Aplicativo/releases/download/v1.0.0/PantherStream-v1.0.0.apk",
-  "publicado_em": "2026-11-11T13:58:26-03:00"
+  "pagina_release": "https://github.com/sandrosilvaaa855-a11y/Aplicativo/releases/tag/v1.4",
+  "download_apk": "https://github.com/sandrosilvaaa855-a11y/Aplicativo/releases/download/v1.4/PantherStream.apk",
+  "publicado_em": "2026-11-11T20:40:00-03:00"
 }
